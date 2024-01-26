@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace wisdomserverExchange
+namespace wisdomserverExchange.Class
 {
-    class Order
+    [XmlRoot("ProductionPlan"), JsonObject]
+    class ProductionPlan
     {
         [XmlElement, JsonProperty("Job")]
         public string Job { get; set; }
@@ -22,8 +23,9 @@ namespace wisdomserverExchange
         [XmlElement, JsonProperty("Note")]
         public string Note { get; set; }
 
-        //[XmlElement, JsonProperty("OrderDetails")]
+        [XmlElement, JsonProperty("OrderDetails")]
         public List<OrderDetails> OrderDetails { get; set; }
-
     }
+
+    
 }

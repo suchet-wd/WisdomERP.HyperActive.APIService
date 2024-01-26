@@ -1,16 +1,17 @@
 using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace wisdomserverExchange
 {
     public class OrderDetailsRatio
     {
-        [JsonProperty("Colorway")]
+        [XmlElement, JsonProperty("Colorway")]
         public string Colorway { get; set; }
 
-        [JsonProperty("Size")]
+        [XmlElement, JsonProperty("Size")]
         public string Size { get; set; }
 
-        [JsonProperty("Quantity")]
+        [XmlElement, JsonProperty("Quantity")]
         public int Quantity { get; set; }
 
     }

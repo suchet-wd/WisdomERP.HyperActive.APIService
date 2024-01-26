@@ -1,44 +1,45 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace wisdomserverExchange
 {
     public class OrderDetails
     {
-        [JsonProperty("StyleNo")]
+        [XmlElement, JsonProperty("StyleNo")]
         public string StyleNo { get; set; }
 
-        [JsonProperty("JobProductionNo")]
+        [XmlElement, JsonProperty("JobProductionNo")]
         public string JobProductionNo { get; set; }
 
-        [JsonProperty("SubjobNo")]
+        [XmlElement, JsonProperty("SubjobNo")]
         public string SubjobNo { get; set; }
 
-        [JsonProperty("GacDate")]
+        [XmlElement, JsonProperty("GacDate")]
         public string GacDate { get; set; }
 
-        [JsonProperty("PoLineItem")]
+        [XmlElement, JsonProperty("PoLineItem")]
         public string PoLineItem { get; set; }
 
-        [JsonProperty("Colorway")]
+        [XmlElement, JsonProperty("Colorway")]
         public string Colorway { get; set; }
 
-        [JsonProperty("Size")]
+        [XmlElement, JsonProperty("Size")]
         public string Size { get; set; }
 
-        [JsonProperty("SubJobQuantity")]
+        [XmlElement, JsonProperty("SubJobQuantity")]
         public int SubJobQuantity { get; set; }
 
-        [JsonProperty("AssortQuantity")]
+        [XmlElement, JsonProperty("AssortQuantity")]
         public List<OrderDetailsRatio> AssortQuantity { get; set; }
 
-        [JsonProperty("BoxQuantity")]
+        [XmlElement, JsonProperty("BoxQuantity")]
         public int BoxQuantity { get; set; }
 
-        [JsonProperty("PackType")]
+        [XmlElement, JsonProperty("PackType")]
         public string PackType { get; set; }
 
-        [JsonProperty("PackRatio")]
+        [XmlElement, JsonProperty("PackRatio")]
         public List<OrderDetailsRatio> PackRatio { get; set; }
 
     }

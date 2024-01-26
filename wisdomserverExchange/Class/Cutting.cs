@@ -1,32 +1,33 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace wisdomserverExchange
 {
     public class Cutting
     {
-        [JsonProperty("Job")]
+        [XmlElement, JsonProperty("Job")]
         public string Job { get; set; }
 
-        [JsonProperty("CustomerName")]
+        [XmlElement, JsonProperty("CustomerName")]
         public string CustomerName { get; set; }
 
-        [JsonProperty("CustomerPo")]
+        [XmlElement, JsonProperty("CustomerPo")]
         public string CustomerPo { get; set; }
 
-        [JsonProperty("JobProductionNo")]
+        [XmlElement, JsonProperty("JobProductionNo")]
         public string JobProductionNo { get; set; }
 
-        [JsonProperty("SubjobNo")]
+        [XmlElement, JsonProperty("SubjobNo")]
         public string SubjobNo { get; set; }
 
-        [JsonProperty("GacDate")]
+        [XmlElement, JsonProperty("GacDate")]
         public string GacDate { get; set; }
 
-        [JsonProperty("POLineItem")]
+        [XmlElement, JsonProperty("POLineItem")]
         public string POLineItem { get; set; }
 
-        [JsonProperty("PooDetails")]
+        [XmlElement, JsonProperty("PooDetails")]
         public List<CuttingPooDetails> PooDetails { get; set; }
 
     }

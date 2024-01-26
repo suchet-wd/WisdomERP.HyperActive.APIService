@@ -47,14 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\BundleInfo.cs" />
     <Compile Include="Class\BundleInfoDetails.cs" />
-    <Compile Include="Class\CuttingPooDetails.cs" />
+    <Compile Include="Class\Cutting.cs" />
     <Compile Include="Class\CuttingPartDetails.cs" />
+    <Compile Include="Class\CuttingPooDetails.cs" />
     <Compile Include="Class\Order.cs" />
     <Compile Include="Class\OrderDetails.cs" />
-    <Compile Include="Class\Cutting.cs" />
-    <Compile Include="Class\BundleInfo.cs" />
     <Compile Include="Class\OrderDetailsRatio.cs" />
+    <Compile Include="Class\ProductionPlan.cs" />
+    <Compile Include="Class\ResponseAPIe.cs" />
     <Compile Include="Class\ResponseAPI.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>

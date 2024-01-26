@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace wisdomserverExchange
@@ -6,16 +7,16 @@ namespace wisdomserverExchange
     public class CuttingPooDetails
     {
 
-        [JsonProperty("PooNo")]
+        [XmlElement, JsonProperty("PooNo")]
         public string PooNo { get; set; }
 
-        [JsonProperty("TableNo")]
+        [XmlElement, JsonProperty("TableNo")]
         public string TableNo { get; set; }
 
-        [JsonProperty("SpreadingRatio")]
+        [XmlElement, JsonProperty("SpreadingRatio")]
         public string SpreadingRatio { get; set; }
 
-        [JsonProperty("NumberofLayer")]
+        [XmlElement, JsonProperty("NumberofLayer")]
         public string NumberofLayer { get; set; }
 
         public List<CuttingPartDetails> CuttingPartDetails { get; set; }

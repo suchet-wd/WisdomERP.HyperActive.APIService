@@ -1,26 +1,27 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace wisdomserverExchange
 {
     public class BundleInfo
     {
-        [JsonProperty("PooNo")]
+        [XmlElement, JsonProperty("PooNo")]
         public string PooNo { get; set; }
 
-        [JsonProperty("CustomerPo")]
+        [XmlElement, JsonProperty("CustomerPo")]
         public string CustomerPo { get; set; }
 
-        [JsonProperty("StyleNo")]
+        [XmlElement, JsonProperty("StyleNo")]
         public string StyleNo { get; set; }
 
-        [JsonProperty("Job")]
+        [XmlElement, JsonProperty("Job")]
         public string Job { get; set; }
 
-        [JsonProperty("JobProductionNo")]
+        [XmlElement, JsonProperty("JobProductionNo")]
         public string JobProductionNo { get; set; }
 
-        [JsonProperty("BundleInfoDetails")]
+        [XmlElement, JsonProperty("BundleInfoDetails")]
         public List<BundleInfoDetails> BundleInfoDetails { get; set; }
 
     }
