@@ -38,7 +38,7 @@ namespace wisdomserverExchange
 
             timer.Elapsed += new ElapsedEventHandler(OnElapsedTime);
 
-            timer.Interval = 6000;
+            timer.Interval = 60000;
             timer.Enabled = true;
 
         }
@@ -254,7 +254,7 @@ namespace wisdomserverExchange
                 ResponseAPI responseAPI;
                 XmlDocument docXML = new XmlDocument();
 
-                string _cmd = "EXEC [HITECH_MERCHAN].[dbo].[SP_GET_DocumentNo_For_Hyperconvert_API] '2024/01/01' ";
+                string _cmd = "EXEC [HITECH_MERCHAN].[dbo].[SP_GET_DocumentNo_For_Hyperconvert_API] '2023/12/01' ";
                 dt = GetDataTable(_cmd);
 
                 // Start API 1: Production Plan
@@ -274,11 +274,11 @@ namespace wisdomserverExchange
 
                     if (JSONresult.Length > 0)
                     {
-                        //WriteLogFile("----------------------------------------------------");
-                        //WriteLogFile(R[1].ToString());
-                        //WriteLogFile("----------------------------------------------------");
-                        //WriteLogFile(JSONresult);
-                        //WriteLogFile("----------------------------------------------------");
+                        WriteLogFile("----------------------------------------------------");
+                        WriteLogFile("API1 ### " + R[1].ToString());
+                        WriteLogFile("----------------------------------------------------");
+                        WriteLogFile(JSONresult);
+                        WriteLogFile("----------------------------------------------------");
                         // ----------- Start Send API Process -----------
                         Console.WriteLine("Start Send API No #1 DocNo = " + R[1].ToString());
 
@@ -354,28 +354,51 @@ namespace wisdomserverExchange
                 }
                 Console.WriteLine("End API#2");
                 //// Start API 3:  Bundle Info
-                //_cmd = "EXEC [HITECH_MERCHAN].dbo.SP_Send_Data_To_Hyperconvert_API3 ";
-                //docXML = GetDataXML(_cmd);
+                foreach (DataRow R in dt.Select("APINo = '3'"))
+                {
+                    _cmd = "EXEC [HITECH_MERCHAN].dbo.SP_Send_Data_To_Hyperconvert_API3 " + R[1].ToString();
+                    docXML = GetDataXML(_cmd);
 
-                //JSONresult = "";
-                //JSONresult = JsonConvert.SerializeXmlNode(docXML);
-                //JSONresult = JSONresult.Replace("\"_", "\"");
-                //JSONresult = JSONresult.Replace("{\"root\":", "");
-                //JSONresult = JSONresult.Replace("}}", "}");
+                    JSONresult = JsonConvert.SerializeObject(docXML);
+                    //JsonConvert.SerializeXmlNode(docXML); //, Newtonsoft.Json.Formatting.Indented
+                    JSONresult = JSONresult.Replace("\"_", "\"");
+                    JSONresult = JSONresult.Replace("\"\",", "");
+                    JSONresult = JSONresult.Replace("\"[]\"", "[]");
+                    JSONresult = JSONresult.Replace("[[],", "[");
+                    JSONresult = JSONresult.Replace("{\"root\":", "");
+                    JSONresult = JSONresult.Replace("}}", "}");
 
-                //if (JSONresult.Length > 0)
-                //{
-                //    //PostDataToApi3(JSONresult);
-                //}
+                    if (JSONresult.Length > 0)
+                    {
+                        WriteLogFile("----------------------------------------------------");
+                        WriteLogFile("API3 ### " + R[1].ToString());
+                        WriteLogFile("----------------------------------------------------");
+                        WriteLogFile(JSONresult);
+                        WriteLogFile("----------------------------------------------------");
+                        // ----------- Start Send API Process -----------
+                        Console.WriteLine("Start Send API No #3 DocNo = " + R[1].ToString());
+                        //responseAPI = PostDataToApi("2", R[1].ToString(), JSONresult);
 
-                //Console.WriteLine(JSONresult);
-                //if (dt.Rows.Count > 0)
-                //{
-                //    string JSONresult;
-                //    //JSONresult = JsonConvert.SerializeObject(dt);
-                //    JSONresult = JsonConvert.SerializeXmlNode(doc);
-                //    PostDataToApi(JSONresult);
-                //}
+                        //if (responseAPI != null)
+                        //{
+                        //    if (responseAPI.Code == "0")
+                        //    {
+                        //        SaveStateSendAPI("2", R[1].ToString(), "1", responseAPI);
+                        //        Console.WriteLine("Send API No #3 DocNo = " + R[1].ToString() + " Successful.");
+                        //    }
+                        //    else
+                        //    {
+                        //        Console.WriteLine("!!! Error API No #3 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
+                        //        SaveStateSendAPI("2", R[1].ToString(), "2", responseAPI);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    Console.WriteLine("Error API No #3 DocNo = " + R[1].ToString() + "!!!");
+                        //}
+                    }
+                }
+                Console.WriteLine("End API#3");
 
             }
             catch (Exception ex)
