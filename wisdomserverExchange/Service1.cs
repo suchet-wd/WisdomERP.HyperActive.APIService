@@ -193,13 +193,13 @@ namespace wisdomserverExchange
                 ResponseAPI responseAPI;
                 XmlDocument docXML = new XmlDocument();
 
-                string _cmd = "EXEC [HITECH_HYPERACTIVE].[dbo].[SP_GET_DocumentNo_For_Hyperconvert_API] '2023/06/01' "; //2023/12/01
+                string _cmd = "EXEC [HITECH_HYPERACTIVE].[dbo].[SP_GET_DocumentNo_For_Hyperconvert_API] '2023/11/01' "; //2023/12/01
                 dt = GetDataTable(_cmd);
 
                 //Start API 1: Production Plan
                 foreach (DataRow R in dt.Select("APINo = '1'"))
                 {
-                    _cmd = "EXEC [HITECH_MERCHAN].dbo.SP_Send_Data_To_Hyperconvert_API1 '" + R[1].ToString() + "'";
+                    _cmd = "EXEC [HITECH_HYPERACTIVE].dbo.SP_Send_Data_To_Hyperconvert_API1 '" + R[1].ToString() + "'";
                     docXML = GetDataXML(_cmd);
                     Console.WriteLine("Get Data for API No #1 DocNo = " + R[1].ToString());
                     JSONresult = JsonConvert.SerializeObject(docXML);
@@ -238,7 +238,7 @@ namespace wisdomserverExchange
                             else
                             {
                                 SaveStateSendAPI("1", R[1].ToString(), "2", responseAPI);
-                                Console.WriteLine("!!! Error API No #1 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
+                                Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
                             }
                         }
                         else
@@ -256,7 +256,7 @@ namespace wisdomserverExchange
                 foreach (DataRow R in dt.Select("APINo = '2'"))
                 {
                     //docXML = new XmlDocument();
-                    _cmd = "EXEC [HITECH_MERCHAN].dbo.SP_Send_Data_To_Hyperconvert_API2 '" + R[1].ToString() + "'";
+                    _cmd = "EXEC [HITECH_HYPERACTIVE].dbo.SP_Send_Data_To_Hyperconvert_API2 '" + R[1].ToString() + "'";
                     docXML = GetDataXML(_cmd);
                     //JSONresult = "";
                     JSONresult = JsonConvert.SerializeObject(docXML);
@@ -267,6 +267,7 @@ namespace wisdomserverExchange
                     //JSONresult = JSONresult.Replace("\"_", "\"");
                     JSONresult = JSONresult.Replace("PartDetail\":[\"[]\",{", "PartDetail\":[{");
                     JSONresult = JSONresult.Replace("PooDetail\":[\"[]\",", "PooDetail\":[");
+                    JSONresult = JSONresult.Replace("\"SpreadingRatio\":[\"[]\",", "\"SpreadingRatio\":[");
                     JSONresult = JSONresult.Replace("\"\",", "");
                     JSONresult = JSONresult.Replace("{\"root\":", "");
                     JSONresult = JSONresult.Replace("\"Route\":[\"[]\",{\"Station", "\"Route\":[{\"Station");
@@ -292,14 +293,32 @@ namespace wisdomserverExchange
                             }
                             else
                             {
-                                SaveStateSendAPI("2", R[1].ToString(), "2", responseAPI);
-                                Console.WriteLine("!!! Error API No #2 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
+                                if (JSONresult.Contains("\"PartDetail\":\"[]\""))
+                                {
+                                    SaveStateSendAPI("2", R[1].ToString(), "1", new ResponseAPI("", "No PartDetails !!!"));
+                                    Console.WriteLine("Error API No #2 DocNo = " + R[1].ToString() + " No PartDetails !!!");
+                                }
+                                else
+                                {
+                                    SaveStateSendAPI("2", R[1].ToString(), "2", responseAPI);
+                                    Console.WriteLine("Error API No #2 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
+                                }
                             }
                         }
                         else
                         {
-                            SaveStateSendAPI("2", R[1].ToString(), "2", responseAPI);
-                            Console.WriteLine("!!! Error API No #2 DocNo = " + R[1].ToString() + " !!! @ No Response");
+                            if (JSONresult.Contains("\"PartDetail\":\"[]\""))
+                            {
+                                SaveStateSendAPI("2", R[1].ToString(), "1", new ResponseAPI("", "No PartDetails !!!"));
+                                Console.WriteLine("Error API No #2 DocNo = " + R[1].ToString() + " No PartDetails !!!");
+                            }
+                            else
+                            {
+                                SaveStateSendAPI("2", R[1].ToString(), "2", responseAPI);
+                                Console.WriteLine("Error API No #2 DocNo = " + R[1].ToString() + " !!! @ No Response");
+                            }
+                            //SaveStateSendAPI("2", R[1].ToString(), "2", responseAPI);
+                            //Console.WriteLine("!!! Error API No #2 DocNo = " + R[1].ToString() + " !!! @ No Response");
                         }
                     }
                 }
