@@ -193,7 +193,7 @@ namespace wisdomserverExchange
                 ResponseAPI responseAPI;
                 XmlDocument docXML = new XmlDocument();
 
-                string _cmd = "EXEC [HITECH_HYPERACTIVE].[dbo].[SP_GET_DocumentNo_For_Hyperconvert_API] '2023/11/01' "; //2023/12/01
+                string _cmd = "EXEC [HITECH_HYPERACTIVE].[dbo].[SP_GET_DocumentNo_For_Hyperconvert_API] '2023/06/01' "; //2023/12/01
                 dt = GetDataTable(_cmd);
 
                 //Start API 1: Production Plan
@@ -237,12 +237,42 @@ namespace wisdomserverExchange
                             }
                             else
                             {
+                                //if (JSONresult.Contains("\"ProductOperation\":[],"))
+                                //{
+                                //    SaveStateSendAPI("1", R[1].ToString(), "2", new ResponseAPI("", "No ProductOperation !!!"));
+                                //    Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " No ProductOperation !!!");
+                                //}
+                                //else if (JSONresult.Contains("\"PackRatio\":[]"))
+                                //{
+                                //    SaveStateSendAPI("1", R[1].ToString(), "2", new ResponseAPI("", "No PackRatio !!!"));
+                                //    Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " No PackRatio !!!");
+                                //}
+                                //else
+                                //{
+                                //    SaveStateSendAPI("1", R[1].ToString(), "2", responseAPI);
+                                //    Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
+                                //}
                                 SaveStateSendAPI("1", R[1].ToString(), "2", responseAPI);
                                 Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
                             }
                         }
                         else
                         {
+                            //if (JSONresult.Contains("\"ProductOperation\":[],"))
+                            //{
+                            //    SaveStateSendAPI("1", R[1].ToString(), "2", new ResponseAPI("", "No ProductOperation !!!"));
+                            //    Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " No ProductOperation !!!");
+                            //}
+                            //else if (JSONresult.Contains("\"PackRatio\":[],"))
+                            //{
+                            //    SaveStateSendAPI("1", R[1].ToString(), "2", new ResponseAPI("", "No PackRatio !!!"));
+                            //    Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " No PackRatio !!!");
+                            //}
+                            //else
+                            //{
+                            //    SaveStateSendAPI("1", R[1].ToString(), "2", responseAPI);
+                            //    Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + " !!! @ No Response");
+                            //}
                             SaveStateSendAPI("1", R[1].ToString(), "2", responseAPI);
                             Console.WriteLine("Error API No #1 DocNo = " + R[1].ToString() + "!!!");
                         }
