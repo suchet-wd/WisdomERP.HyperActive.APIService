@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            //----------- Read Connecttion String From File XML
+            HI.Conn.DB.GetXmlConnectionString();
+            //----------- Read Connecttion String From File XML
             components = new System.ComponentModel.Container();
             this.ServiceName = "Service1";
         }
