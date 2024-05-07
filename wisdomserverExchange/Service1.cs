@@ -30,7 +30,8 @@ namespace wisdomserverExchange
         protected override void OnStart(string[] args)
         {
             timer.Elapsed += new ElapsedEventHandler(OnElapsedTime);
-            timer.Interval = 60000;
+            timer.Interval = int.Parse(HI.Conn.DB._Timer);
+            //60000;
             timer.Enabled = true;
         }
 

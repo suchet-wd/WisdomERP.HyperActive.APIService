@@ -11,11 +11,6 @@ namespace HyperActive
         private string code;
         private string msg;
 
-        //public ResponseAPI()
-        //{
-        //    this.Code = code;
-        //    this.msg = msg;
-        //}
 
         public ResponseAPI(string code, string msg)
         {

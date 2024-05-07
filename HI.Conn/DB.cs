@@ -27,6 +27,10 @@ namespace HI.Conn
         private static string[] _UserName = new string[30];
         private static string[] _PasswordName = new string[30];
         private static string[] _DBAPILink = new string[30];
+        private static string[] _HPName = new string[30];
+        public static string _StartDate;
+        public static string _Timer;
+        public static string _apiToken;
 
         private static string[] _SystemDBName = { "DB_TEMPDB", "DB_SECURITY", "DB_HR", "DB_SYSTEM", "DB_MASTER", "DB_MER", "DB_PUR", "DB_INVEN", "DB_PROD", "DB_ACCOUNT", "DB_LANG", "DB_LOG", "DB_MAIL", "DB_HR_PAYROLL", "DB_MEDC", "DB_FG", "DB_PLANNING", "DB_DOC", "DB_FIXED", "DB_SAMPLE", "DB_TIME", "DB_FHS", "DB_HYPERACTIVE" };
         public enum DataBaseName : int
@@ -56,6 +60,28 @@ namespace HI.Conn
             DB_HYPERACTIVE = 22
         }
 
+        private static string[] _SystemHPName = { "api1", "api2", "api5", "api6" };
+        public enum HyperActiveName : int
+        {
+            api1 = 0,
+            api2 = 1,
+            api5 = 2,
+            api6 = 3
+        }
+
+        public static string GetHyperActiveAPIName(HyperActiveName hyperActiveName)
+        {
+            try
+            {
+                return _HPName[(int)hyperActiveName];
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+
         public static string GetDataBaseName(DataBaseName DbName)
         {
             try
@@ -67,6 +93,8 @@ namespace HI.Conn
                 return "";
             }
         }
+
+
 
         public static string GetServerName(DataBaseName DbName)
         {
@@ -235,6 +263,7 @@ namespace HI.Conn
                 string dbName = null;
                 string dbUserName = null;
                 string dbPassword = null;
+                DataTable _HyperActive = null;
 
                 AppService ="";
                 AppServicePath ="";
@@ -376,6 +405,32 @@ namespace HI.Conn
                     _DBAPILink[i] = dbserviceapi;
                     i = i + 1;
                 };
+
+                i = 0;
+                _HyperActive = DS.Tables["APIHyperActive"].Copy();
+
+                //string hpapi = null;
+                //string hpapiport = null;
+                //string hpserviceapi = null;
+                foreach (string StrHPName in _SystemHPName)
+                {
+                    //dbServerName = "";
+                    dbName = "";
+                    foreach (DataRow Row in _HyperActive.Select("name='" + StrHPName + "' "))
+                    {
+                       // dbServerName = (Row["name"]).ToString();
+                        dbName = (Row["apiUrl"]).ToString();
+                    }
+
+                    //_ServerName[i] = dbServerName;
+                    _HPName[i] = dbName;
+                    i = i + 1;
+                };
+
+                if (DS.Tables.IndexOf("StartDate") != -1) { _StartDate = DS.Tables["StartDate"].Rows[0]["Name"].ToString(); };
+                if (DS.Tables.IndexOf("Timer") != -1) { _Timer = DS.Tables["Timer"].Rows[0]["Name"].ToString(); };
+                if (DS.Tables.IndexOf("apiToken") != -1) { _apiToken = DS.Tables["apiToken"].Rows[0]["Name"].ToString(); };
+
 
                 DS.Dispose();
                 DS = null;

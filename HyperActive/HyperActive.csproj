@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\DataManagement.cs" />
-    <Compile Include="Class\HyperActiveAPI1.cs" />
     <Compile Include="Class\WriteLogFile.cs" />
     <Compile Include="Class\HyperActiveAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
