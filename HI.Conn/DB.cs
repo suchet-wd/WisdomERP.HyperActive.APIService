@@ -60,13 +60,16 @@ namespace HI.Conn
             DB_HYPERACTIVE = 22
         }
 
-        private static string[] _SystemHPName = { "api1", "api2", "api5", "api6" };
+        private static string[] _SystemHPName = { "api1", "api2", "api5", "api6", "api7", "api9", "api10" };
         public enum HyperActiveName : int
         {
             api1 = 0,
             api2 = 1,
             api5 = 2,
-            api6 = 3
+            api6 = 3,
+            api7 = 4,
+            api9 = 5,
+            api10 = 6
         }
 
         public static string GetHyperActiveAPIName(HyperActiveName hyperActiveName)

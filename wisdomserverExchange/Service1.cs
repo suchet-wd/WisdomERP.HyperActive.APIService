@@ -1,13 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Data;
+﻿using System;
 using System.IO;
 using System.Net.Http;
 using System.ServiceProcess;
-using System.Text;
 using System.Timers;
-using System.Xml;
-using wisdomserverExchange.Class;
 
 namespace wisdomserverExchange
 {
@@ -32,6 +27,7 @@ namespace wisdomserverExchange
             timer.Elapsed += new ElapsedEventHandler(OnElapsedTime);
             timer.Interval = int.Parse(HI.Conn.DB._Timer);
             //60000;
+            timer.AutoReset = true;
             timer.Enabled = true;
         }
 
@@ -44,6 +40,7 @@ namespace wisdomserverExchange
         {
             try
             {
+                timer.Enabled = false;
                 HyperActive.HyperActiveAPI hyper = new HyperActive.HyperActiveAPI();
             }
             catch (Exception ex)
@@ -53,13 +50,13 @@ namespace wisdomserverExchange
         }
 
 
-        public void WriteLogFile(string message)
-        {
-            StreamWriter sw = null;
-            sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\WisdomLogFile.txt", true);
-            sw.WriteLine("{DateTime.Now.ToString()} :" + message);
-            sw.Flush();
-            sw.Close();
-        }
+        //public void WriteLogFile(string message)
+        //{
+        //    StreamWriter sw = null;
+        //    sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "\\WisdomLogFile.txt", true);
+        //    sw.WriteLine("{DateTime.Now.ToString()} :" + message);
+        //    sw.Flush();
+        //    sw.Close();
+        //}
     }
 }
