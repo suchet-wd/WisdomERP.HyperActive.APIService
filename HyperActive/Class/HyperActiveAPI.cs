@@ -35,6 +35,34 @@ namespace HyperActive
                 API2(R[1].ToString());
             }
             Console.WriteLine("End API#2");
+
+            //// Start API 6: Bundle Update
+            foreach (DataRow R in dt.Select("APINo = '6'"))
+            {
+                API6(R[1].ToString());
+            }
+            Console.WriteLine("End API#6 : Bundle Update");
+
+            //// Start API 7: 
+            foreach (DataRow R in dt.Select("APINo = '7'"))
+            {
+                API7(R[1].ToString());
+            }
+            Console.WriteLine("End API#7");
+
+            //// Start API 9: 
+            foreach (DataRow R in dt.Select("APINo = '9'"))
+            {
+                API9(R[1].ToString());
+            }
+            Console.WriteLine("End API#9");
+
+            //// Start API 10: 
+            foreach (DataRow R in dt.Select("APINo = '10'"))
+            {
+                API10(R[1].ToString());
+            }
+            Console.WriteLine("End API#10");
         }
 
 
@@ -125,7 +153,7 @@ namespace HyperActive
                         }
                     }
                 }
-                else if (_apiNo != "7") // For API #7 Only
+                else if (_apiNo == "7") // For API #7 Only
                 {
                     //List<BundleRfidBarcodeList> bundleRfidBarcodeList = null;
                     //ResponseAPI(string boxRfid, string boxBarcode, string code, string msg, List<BundleRfidBarcodeList> bundleRfidBarcodeList)
@@ -175,7 +203,7 @@ namespace HyperActive
             JSONresult = JSONresult.Replace("\"[]\"", "[]");
             JSONresult = JSONresult.Replace("[[],", "[");
             JSONresult = JSONresult.Replace("{\"root\":", "");
-            JSONresult = JSONresult.Replace("\"_\",", "");
+            JSONresult = JSONresult.Replace("\"_\",", "\"\",");
             JSONresult = JSONresult.Replace("AssortQuantity\":{", "AssortQuantity\":[{");
             JSONresult = JSONresult.Replace("},\"ProductOperation", "}],\"ProductOperation");
             JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
@@ -226,6 +254,7 @@ namespace HyperActive
             JSONresult = JSONresult.Replace("\"Route\": \"[]\",", "\"Route\": [],");                    // Case Null
             JSONresult = JSONresult.Replace("PartDetail\":[\"[]\"],{", "PartDetail\":[],{");
             JSONresult = JSONresult.Replace("\"PartDetail\":\"[]\",", "\"PartDetail\":[],");          // Case Null
+            JSONresult = JSONresult.Replace("\"PartDetail\":\"[]\"}", "\"PartDetail\":[]}");          // Case Null
             JSONresult = JSONresult.Replace("[{\"Station\":null,\"FactoryNo\":null}]", "[]");
             JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
 
@@ -300,7 +329,7 @@ namespace HyperActive
             JSONresult = JSONresult.Replace("\"[]\"", "[]");
             JSONresult = JSONresult.Replace("[[],", "[");
             JSONresult = JSONresult.Replace("{\"root\":", "");
-            JSONresult = JSONresult.Replace("\"_\",", "");
+            JSONresult = JSONresult.Replace("\"_\",", "\"\",");
             JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
 
             if (JSONresult.Length > 0)
@@ -344,7 +373,7 @@ namespace HyperActive
             JSONresult = JSONresult.Replace("\"[]\"", "[]");
             JSONresult = JSONresult.Replace("[[],", "[");
             JSONresult = JSONresult.Replace("{\"root\":", "");
-            JSONresult = JSONresult.Replace("\"_\",", "");
+            JSONresult = JSONresult.Replace("\"_\",", "\"\",");
             JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
 
             if (JSONresult.Length > 0)
@@ -356,7 +385,6 @@ namespace HyperActive
                     // 0 = normal, 1 = error
                     if (responseAPI.Code == "0")
                     {
-
                         //_ApiNo, _DocNo, _State, _responseAPI, JSONresult
                         SaveStateSendAPI("7", DocNo, "1", responseAPI, JSONresult);
                         Console.WriteLine("Send API No #7 : Station Results - DocNo = " + DocNo + " Successful.");
@@ -390,7 +418,8 @@ namespace HyperActive
         private void API9(string DocNo)     //API_9 : Pack Results
         {
             string QryStr = "EXEC " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_HYPERACTIVE) +
-                ".dbo.SP_Send_Data_To_Hyperconvert_API9 '" + DocNo + "'";
+                ".dbo.SP_Send_Data_To_Hyperconvert_API9 ";
+            //".dbo.SP_Send_Data_To_Hyperconvert_API9 @DateStart ='" + DocNo + "', @DateEnd = '" + DocNo + "'";
             XmlDocument docXML = HI.Conn.SQLConn.GetDataXML(QryStr, HI.Conn.DB.DataBaseName.DB_HYPERACTIVE);
             Console.WriteLine("Get Data for API No #9 : Pack Results -  DocNo = " + DocNo);
             string JSONresult = JsonConvert.SerializeObject(docXML);
@@ -398,7 +427,7 @@ namespace HyperActive
             JSONresult = JSONresult.Replace("\"[]\"", "[]");
             JSONresult = JSONresult.Replace("[[],", "[");
             JSONresult = JSONresult.Replace("{\"root\":", "");
-            JSONresult = JSONresult.Replace("\"_\",", "");
+            JSONresult = JSONresult.Replace("\"_\",", "\"\",");
             JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
 
             if (JSONresult.Length > 0)
@@ -407,7 +436,7 @@ namespace HyperActive
 
                 if (responseAPI != null)
                 {
-                    if (responseAPI.Code == "0")
+                    if (responseAPI.Code == "0" && UpdateStateAPI9())
                     {
                         //_ApiNo, _DocNo, _State, _responseAPI, JSONresult
                         SaveStateSendAPI("9", DocNo, "1", responseAPI, JSONresult);
@@ -415,6 +444,7 @@ namespace HyperActive
                     }
                     else
                     {
+                        RollBackStateAPI9();
                         //_ApiNo, _DocNo, _State, _responseAPI, JSONresult
                         SaveStateSendAPI("9", DocNo, "2", responseAPI, JSONresult);
                         Console.WriteLine("Error API No #9 : Pack Results -  DocNo = " + DocNo + " !!! @ " + responseAPI.Msg + " [Code:" + responseAPI.Code + "]");
@@ -422,6 +452,7 @@ namespace HyperActive
                 }
                 else
                 {
+                    RollBackStateAPI9();
                     //_ApiNo, _DocNo, _State, _responseAPI, JSONresult
                     SaveStateSendAPI("9", DocNo, "2", responseAPI, JSONresult);
                     Console.WriteLine("Error API No #9 : Pack Results - DocNo = " + DocNo + "!!!");
@@ -432,7 +463,7 @@ namespace HyperActive
         private void API10(string DocNo)
         {
             string QryStr = "EXEC " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_HYPERACTIVE) +
-                ".dbo.SP_Send_Data_To_Hyperconvert_API10 '" + DocNo + "'";
+                ".dbo.SP_Send_Data_To_Hyperconvert_API10 @BarcodeSendSuplNo = '" + DocNo + "'";
             XmlDocument docXML = HI.Conn.SQLConn.GetDataXML(QryStr, HI.Conn.DB.DataBaseName.DB_HYPERACTIVE);
             Console.WriteLine("Get Data for API No #10 : Out Sourse Status DocNo = " + DocNo);
             string JSONresult = JsonConvert.SerializeObject(docXML);
@@ -440,7 +471,7 @@ namespace HyperActive
             JSONresult = JSONresult.Replace("\"[]\"", "[]");
             JSONresult = JSONresult.Replace("[[],", "[");
             JSONresult = JSONresult.Replace("{\"root\":", "");
-            JSONresult = JSONresult.Replace("\"_\",", "");
+            JSONresult = JSONresult.Replace("\"_\",", "\"\",");
             JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
 
             if (JSONresult.Length > 0)
@@ -480,7 +511,7 @@ namespace HyperActive
                 {
                     _responseAPI = new ResponseAPI("", "Server not response !!!");
                 }
-                
+
                 _Cmd = "DECLARE @Date varchar(10) = Convert(varchar(10), Getdate(), 111) \n";
                 _Cmd += "DECLARE @Time varchar(10) = Convert(varchar(8), Getdate(), 114) \n\n";
 
@@ -563,22 +594,52 @@ namespace HyperActive
             {
                 _Cmd += "      UPDATE " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_HYPERACTIVE) + ".dbo.TPROSendSuplDefect \n";
                 _Cmd += "      SET FTStateSendAPI6 = '1', FTExportDate6 = @Date , FTExportTime6 = @Time \n";
-                _Cmd += "      WHERE FTOrderProdNo IN (SELECT DISTINCT op.FTOrderProdNo FROM " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_PROD) + ".dbo.TPRODTOrderProd AS op WITH (NOLOCK) WHERE op.FTOrderNo = '" + _DocNo + "') \n";
+                _Cmd += "      WHERE FTBarcodeSendSuplNo = '" + _DocNo + "') \n";
             }
             if (_ApiNo == "7" && _State == "1")
             {
                 _Cmd += "      UPDATE " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_HYPERACTIVE) + ".dbo.TPROSendSuplDefect \n";
                 _Cmd += "      SET FTStateSendAPI7 = '1', FTExportDate7 = @Date , FTExportTime7 = @Time \n";
-                _Cmd += "      WHERE FTOrderProdNo IN (SELECT DISTINCT op.FTOrderProdNo FROM " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_PROD) + ".dbo.TPRODTOrderProd AS op WITH (NOLOCK) WHERE op.FTOrderNo = '" + _DocNo + "') \n";
+                _Cmd += "      WHERE FTBarcodeSendSuplNo = '" + _DocNo + "') \n";
+            }
+            if (_ApiNo == "9" && _State == "1")
+            {
+                _Cmd += "      UPDATE " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_PROD) + ".dbo.TPRODBarcodeScanOutline \n";
+                _Cmd += "      SET FTStateExport = '1', FDExportDate = @Date , FTExportTime = @Time \n";
+                _Cmd += "      WHERE FDInsDate = '" + _DocNo + "') \n";
             }
             if (_ApiNo == "10" && _State == "1")
             {
                 _Cmd += "      UPDATE " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_HYPERACTIVE) + ".dbo.TPROSendSuplDefect \n";
                 _Cmd += "      SET FTStateSendAPI10 = '1', FTExportDate10 = @Date , FTExportTime10 = @Time \n";
-                _Cmd += "      WHERE FTOrderProdNo IN (SELECT DISTINCT op.FTOrderProdNo FROM " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_PROD) + ".dbo.TPRODTOrderProd AS op WITH (NOLOCK) WHERE op.FTOrderNo = '" + _DocNo + "') \n";
+                _Cmd += "      WHERE FTBarcodeSendSuplNo = '" + _DocNo + "') \n";
             }
             return _Cmd;
         } // End UpdateStatus(string _ApiNo, string _State)
 
+
+        private bool UpdateStateAPI9()
+        {
+            string _Cmd = "";
+            _Cmd = "DECLARE @Date varchar(10) = Convert(varchar(10), Getdate(), 111) \n";
+            _Cmd += "DECLARE @Time varchar(10) = Convert(varchar(8), Getdate(), 114) \n";
+            _Cmd += "UPDATE " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_PROD) + ".dbo.TPRODBarcodeScanOutline \n";
+            _Cmd += "SET FTStateExport = '1', FTExportDate = @Date , FTExportTime = @Time \n";
+            _Cmd += "WHERE FTStateExport = '2'";
+
+            return HI.Conn.SQLConn.ExecuteOnly(_Cmd, HI.Conn.DB.DataBaseName.DB_PROD);
+        } // End UpdateStateAPI9
+
+        private bool RollBackStateAPI9()
+        {
+            string _Cmd = "";
+            _Cmd = "DECLARE @Date varchar(10) = Convert(varchar(10), Getdate(), 111) \n";
+            _Cmd += "DECLARE @Time varchar(10) = Convert(varchar(8), Getdate(), 114) \n";
+            _Cmd += "UPDATE " + HI.Conn.DB.GetDataBaseName(HI.Conn.DB.DataBaseName.DB_PROD) + ".dbo.TPRODBarcodeScanOutline \n";
+            _Cmd += "SET FTStateExport = '0', FTExportDate = @Date , FTExportTime = @Time \n";
+            _Cmd += "WHERE FTStateExport = '2'";
+
+            return HI.Conn.SQLConn.ExecuteOnly(_Cmd, HI.Conn.DB.DataBaseName.DB_PROD);
+        } // End UpdateStateAPI9
     } // End class HyperActiveAPI
 }
