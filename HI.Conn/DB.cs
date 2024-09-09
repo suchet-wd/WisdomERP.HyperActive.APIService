@@ -32,7 +32,10 @@ namespace HI.Conn
         public static string _Timer;
         public static string _apiToken;
 
-        private static string[] _SystemDBName = { "DB_TEMPDB", "DB_SECURITY", "DB_HR", "DB_SYSTEM", "DB_MASTER", "DB_MER", "DB_PUR", "DB_INVEN", "DB_PROD", "DB_ACCOUNT", "DB_LANG", "DB_LOG", "DB_MAIL", "DB_HR_PAYROLL", "DB_MEDC", "DB_FG", "DB_PLANNING", "DB_DOC", "DB_FIXED", "DB_SAMPLE", "DB_TIME", "DB_FHS", "DB_HYPERACTIVE" };
+        private static string[] _SystemDBName = { "DB_TEMPDB", "DB_SECURITY", "DB_HR", "DB_SYSTEM", 
+            "DB_MASTER", "DB_MER", "DB_PUR", "DB_INVEN", "DB_PROD", "DB_ACCOUNT", "DB_LANG", "DB_LOG", 
+            "DB_MAIL", "DB_HR_PAYROLL", "DB_MEDC", "DB_FG", "DB_PLANNING", "DB_DOC", "DB_FIXED", 
+            "DB_SAMPLE", "DB_TIME", "DB_FHS", "DB_HYPERACTIVE" };
         public enum DataBaseName : int
         {
             DB_TEMPDB = 0,
@@ -60,7 +63,7 @@ namespace HI.Conn
             DB_HYPERACTIVE = 22
         }
 
-        private static string[] _SystemHPName = { "api1", "api2", "api5", "api6", "api7", "api9", "api10" };
+        private static string[] _SystemHPName = { "api1", "api2", "api5", "api6", "api7", "api9", "api10", "api11" };
         public enum HyperActiveName : int
         {
             api1 = 0,
@@ -69,7 +72,8 @@ namespace HI.Conn
             api6 = 3,
             api7 = 4,
             api9 = 5,
-            api10 = 6
+            api10 = 6,
+            api11 = 7
         }
 
         public static string GetHyperActiveAPIName(HyperActiveName hyperActiveName)
