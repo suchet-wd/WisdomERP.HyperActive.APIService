@@ -434,16 +434,24 @@ namespace HyperActive
             XmlDocument docXML = HI.Conn.SQLConn.GetDataXML(QryStr, HI.Conn.DB.DataBaseName.DB_HYPERACTIVE);
             Console.WriteLine("Get Data for API No #9 : Pack Results -  DocNo = " + DocNo);
             string JSONresult = JsonConvert.SerializeObject(docXML);
-            //JsonConvert.SerializeXmlNode(docXML); //, Newtonsoft.Json.Formatting.Indented
+            JSONresult = JsonConvert.SerializeObject(docXML);
             JSONresult = JSONresult.Replace("\"[]\"", "[]");
-            JSONresult = JSONresult.Replace("[[],", "[");
             JSONresult = JSONresult.Replace(":\"_", ":\"");
-            //JSONresult = JSONresult.Replace("}}", "}");
+            JSONresult = JSONresult.Replace(":[[],{\"", ":[{\"");
             JSONresult = JSONresult.Replace("{\"root\":", "");
             JSONresult = JSONresult.Replace("\"_\",", "\"\",");
             JSONresult = JSONresult.Replace("{\"PackResults\":[", "[");
-            JSONresult = JSONresult.Replace("]}", "]");
-            JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
+            JSONresult = JSONresult.Substring(0, JSONresult.Length - 2);
+            ////////JsonConvert.SerializeXmlNode(docXML); //, Newtonsoft.Json.Formatting.Indented
+            //////JSONresult = JSONresult.Replace("\"[]\"", "[]");
+            //////JSONresult = JSONresult.Replace("[[],", "[");
+            //////JSONresult = JSONresult.Replace(":\"_", ":\"");
+            ////////JSONresult = JSONresult.Replace("}}", "}");
+            //////JSONresult = JSONresult.Replace("{\"root\":", "");
+            //////JSONresult = JSONresult.Replace("\"_\",", "\"\",");
+            //////JSONresult = JSONresult.Replace("{\"PackResults\":[", "[");
+            //////JSONresult = JSONresult.Replace("]}", "]");
+            //////JSONresult = JSONresult.Substring(0, JSONresult.Length - 1);
 
             if (JSONresult.Length > 0)
             {
